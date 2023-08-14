@@ -29,7 +29,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class Game_controleur implements Initializable { //yes
+public class Game_controleur implements Initializable { //yeszd
     String color;
     String name;
     @FXML
