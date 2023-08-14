@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.jeuxst.Suit">
+   <children>
+      <TextField fx:id="NOMCL" layoutX="224.0" layoutY="143.0" />
+      <ChoiceBox fx:id="myChoiceBox" layoutX="224.0" layoutY="245.0" prefWidth="150.0" />
+      <Label layoutX="224.0" layoutY="200.0" prefHeight="18.0" prefWidth="162.0" text="Coleur du sabre laser :" />
+      <Label fx:id="label1" layoutX="192.0" layoutY="297.0" prefHeight="42.0" prefWidth="214.0" />
+      <Button layoutX="278.0" layoutY="339.0" mnemonicParsing="false" onAction="#onHelloButtonClick" text="Button" />
+   </children>
+</AnchorPane>
