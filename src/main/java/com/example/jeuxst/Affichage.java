@@ -34,6 +34,15 @@ public class Affichage {
 
     }
 
+    public static void configBackgroun(ImageView iV, Scene s, Parent parent) {
+
+    for(int i = 0; i<5; i++){
+        
+        
+    }
+
+    }
+
 
 
 public static double Xconfigure(ImageView iV,double x,double y){
