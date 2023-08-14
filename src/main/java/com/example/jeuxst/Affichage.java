@@ -10,8 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 
-
-/* FAIT PAR ROMAINPC */
+//lol ca marche
 
 
 
