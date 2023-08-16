@@ -10,7 +10,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 
-//lol ca m
+
+//lol
 
 
 
@@ -34,44 +35,40 @@ public class Affichage {
 
     }
 
-    public static void configBackgroun(ImageView iV, Scene s, Parent parent) {
 
-    for(int i = 0; i<5; i++){
-        
-        
+
+    public static double Xconfigure(ImageView iV,double x,double y){
+        Scene sne=  iV.getScene();
+        double newX=0;
+        double newy=0;
+
+        newX =  x * (iV.getFitWidth() / iV.getFitHeight());
+        newy =  y * (iV.getFitHeight() / iV.getFitWidth());
+        System.out.println("ta mère ");
+        // System.out.println("X AF= "+newX+"YAF = "+newy);
+        //System.out.println("Xnom= "+x+"Ynom = "+y);
+
+
+        return 2.00;
     }
 
-    }
+    public static void configurer(ImageView iV, double LRatio, double HRatio, SimpleDoubleProperty hGX, SimpleDoubleProperty hGY,ImageView background, boolean down) {
 
-
-
-public static double Xconfigure(ImageView iV,double x,double y){
-       Scene sne=  iV.getScene();
- double newX=0;
- double newy=0;
-
-            newX =  x * (iV.getFitWidth() / iV.getFitHeight());
-    newy =  y * (iV.getFitHeight() / iV.getFitWidth());
-    System.out.println("ta mère ");
-   // System.out.println("X AF= "+newX+"YAF = "+newy);
-    //System.out.println("Xnom= "+x+"Ynom = "+y);
-
-
-    return 2.00;
-}
-
-    public static void configurer(ImageView iV, double LRatio, double HRatio, double hGX, double hGY) {
-        SimpleDoubleProperty proprieteDoubleX = new SimpleDoubleProperty(hGX);
-        SimpleDoubleProperty proprieteDoubleY = new SimpleDoubleProperty(hGY);
         iV.fitHeightProperty().bind(background.fitHeightProperty().multiply(HRatio));
         iV.fitWidthProperty().bind(background.fitWidthProperty().multiply(LRatio));
+        if (down) {
+            SimpleDoubleProperty HGY2 =new SimpleDoubleProperty();
+            HGY2.set(hGY.get()+LRatio);
+            iV.layoutXProperty().bind(background.fitWidthProperty().multiply(hGX));
+            iV.layoutYProperty().bind(background.fitHeightProperty().multiply( HGY2));
 
 
-     //   iV.layoutXProperty().bind(background.fitWidthProperty().multiply(proprieteDoubleX ));
-      //  iV.layoutYProperty().bind(background.fitHeightProperty().multiply(proprieteDoubleY));
+        }else{
 
+            iV.layoutXProperty().bind(background.fitWidthProperty().multiply(hGX));
+            iV.layoutYProperty().bind(background.fitHeightProperty().multiply(hGY));
 
-
+        }
     }
 
 
