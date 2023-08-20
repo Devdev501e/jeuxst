@@ -13,5 +13,6 @@
             <Font size="11.0" />
          </font></Button>
       <ImageView fx:id="pers" fitHeight="150.0" fitWidth="200.0" layoutX="191.0" layoutY="192.0" onKeyPressed="#show" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="obstacle" fitHeight="150.0" fitWidth="200.0" layoutX="250.0" layoutY="192.0" pickOnBounds="true" preserveRatio="true" />
    </children>
 </AnchorPane>

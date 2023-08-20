@@ -70,9 +70,17 @@ public class Affichage {
 
         }
     }
+    public static void configurer2(ImageView iV, double LRatio, double HRatio, double hGX, double hGY,ImageView background) {
+
+        iV.fitHeightProperty().bind(background.fitHeightProperty().multiply(HRatio));
+        iV.fitWidthProperty().bind(background.fitWidthProperty().multiply(LRatio));
+
+            iV.layoutXProperty().bind(background.fitWidthProperty().multiply(hGX));
+            iV.layoutYProperty().bind(background.fitHeightProperty().multiply(hGY));
+
+        }
+    }
 
 
 
 
-
-}

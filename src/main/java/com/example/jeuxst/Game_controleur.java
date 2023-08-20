@@ -3,35 +3,27 @@ package com.example.jeuxst;
 import POO.Jedi;
 
 import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class Game_controleur implements Initializable {
+
+    /* getlayoutX et getlayoutY= Ces méthodes renvoient les coordonnées du coin supérieur gauche de l'ImageView par rapport à son parent.*/
     String color;
     String name;
     @FXML
@@ -46,19 +38,26 @@ public class Game_controleur implements Initializable {
     @FXML
     Button lol;
 
+    @FXML
+    ImageView obstacle;
+
     Jedi personnage;
     Image imagePersonnage;
+
+    Image imageObstacle;
+
+    boolean bolObs=false;
 
 
 
     private static SimpleDoubleProperty HGX = new SimpleDoubleProperty();
     private static SimpleDoubleProperty HGY = new SimpleDoubleProperty();
+
+    private static SimpleDoubleProperty HOX = new SimpleDoubleProperty();
+    private static SimpleDoubleProperty HOY = new SimpleDoubleProperty();
+
     private static double G = 0.003d;
     private static double vMarche = 0.02d;
-
-
-
-
     private static double vitesseY =0.0;
 
 
@@ -86,20 +85,12 @@ public class Game_controleur implements Initializable {
     boolean nextScene= true;
     int sceneChangement=0;
 
-    public void fitCordinate(ImageView iV,double x,double y){
+
+    // Pour gérer les obstacles
+    ArrayList imageViewList=new ArrayList<ImageView>();
+    int nombreObstacle=2;
 
 
-  /*  Scene sne=  iV.getScene();
-    double newX=0;
-    double newy=0;
-
-    newX =  x * (iV.getFitWidth() / iV.getFitHeight());
-    newy =  y * (iV.getFitHeight() / iV.getFitWidth());
-   this.déplacementY=newy;
-   this.déplacementX=newX;
-   iV.setLayoutY(déplacementY);
-   iV.setLayoutX(déplacementX);*/
-    }
     public Game_controleur( ) {
 
 
@@ -107,7 +98,9 @@ public class Game_controleur implements Initializable {
     }
     public void initia(String colort, String namet) {
         backGroundImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" +"marle0"+".png")));
+        imageObstacle =new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" +"obstacle0"+".png")));
         backGround.setImage(  backGroundImage);
+        obstacle.setImage(imageObstacle);
         name = namet;
         color = colort;
         System.out.println(
@@ -115,20 +108,38 @@ public class Game_controleur implements Initializable {
         );
 
 
-        personnage = new Jedi(20, 2, 10, 2, 14, "mario");
 
-// Ajoutez le nœud représentant le personnage à votre conteneur
+        personnage = new Jedi(20, 2, 10, 2, 14, "mario");
+      ImageView obstacle1 =new ImageView();
+       Image imageObstacle1 =new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" +"obstacle0"+".png")));
+      obstacle1.setImage(imageObstacle1);
+
+        mainAnchorPane.getChildren().addAll(obstacle1);
+
+
 
 
 
 
         HGX.set(0.1d);
         HGY.set(0.0d);
+        // position de l'obstacle :
+        HOX.set(0.5d);
+        HOY.set(0.7d);
 
 
-        System.out.println("HGY = "+HGY);
-        System.out.println("HGX = "+HGX);
+      for (int i=0;i<nombreObstacle;i++){
+
+          Image image =new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/obstacle" + i + ".png")));
+            ImageView imageView = new ImageView(image);
+            imageViewList.add(imageView);
+            mainAnchorPane.getChildren().add(imageView);
+        }
+        System.out.println( imageViewList);
+
+
     }
+
     public void initializeData(Scene scene) {
 
 
@@ -214,9 +225,9 @@ public class Game_controleur implements Initializable {
 
     @FXML
     public void show(KeyEvent event) throws IOException {
-        System.out.println("X= " + pers.getLayoutX() + "Y= " + pers.getLayoutY());
+     //   System.out.println("X= " + pers.getLayoutX() + "Y= " + pers.getLayoutY());
 
-        System.out.println(pers.getFitHeight());
+     //   System.out.println(pers.getFitHeight());
 
 
         //déplacementY-=5;
@@ -235,41 +246,71 @@ public class Game_controleur implements Initializable {
     AnimationTimer animationTimer = new AnimationTimer() {
         @Override
         public void handle(long now) {
-
-            if(pers.getLayoutX()+pers.getFitWidth()>=backGround.getFitWidth() &&nextScene){
-                sceneChangement ++;
-                if(sceneChangement>2){ // j'ai pas encore fait de scene 3
-                    sceneChangement=2;
-                }
-                nextScene=false;
-                backGroundImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" +"marle"+sceneChangement+".png")));
-                System.out.println("ta mère");
-                backGround.setImage(backGroundImage);
-
-                HGX.set(0.0d);
-                HGY.set(0.9d);
-            }
-            if(pers.getLayoutX()+pers.getFitWidth()<=0){ // pour éviter de passer en dessous de 0 car il n y a pas de scene -1
-                sceneChangement --;
-                if(sceneChangement<=0){
-                    sceneChangement=0;
-                }
-                HGX.set(1.0d);
-                HGY.set(0.9d);
-                backGroundImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" +"marle"+sceneChangement+".png")));
-                System.out.println("ta mère");
-                backGround.setImage(backGroundImage);
-
-
-            }
-
-
-
             Affichage.configBackground(backGround,backGround.getScene(),backGround.getParent());
 
             Affichage.configurer(pers, 0.046875d, 0.166666d, HGX, HGY, backGround,down);
 
-            //gravité:
+            Affichage.configurer2(obstacle,0.20d,0.20d,0.2d,0.6d,backGround);
+
+
+            ImageView imageView1 = (ImageView)imageViewList.get(1);
+            double Hration= (imageView1.getImage().getHeight()/backGround.getFitHeight())/2;
+            double Lration=(imageView1.getImage().getWidth()/backGround.getFitWidth())/2;
+            System.out.println("Hration = "+imageView1.getImage().getWidth()/backGround.getFitWidth()/10);
+            Affichage.configurer2(imageView1,Lration,Hration,0.4d,0.6d,backGround);
+
+           // System.out.println("obstacle = "+obstacle.getLayoutX());
+          //  System.out.println("pers = "+pers.getLayoutX());
+
+            if(obstacle.getLayoutX()+obstacle.getFitWidth()>=pers.getLayoutX()&&obstacle.getLayoutX()-30<=pers.getLayoutX()&&pers.getLayoutY()+pers.getFitHeight()<obstacle.getLayoutY()+obstacle.getFitHeight()){
+
+                bolObs=true;
+                System.out.println("ca marche = "+obstacle.getFitHeight());
+           //     System.out.println("getlayoutY = "+obstacle.getLayoutY()+"obstacle.getFitHeight() = "+obstacle.getFitHeight()+"backGround.getFitheight()"+backGround.getFitHeight());
+
+            }else{
+                System.out.println("ca marche pas");
+                bolObs=false;
+            }
+
+
+            if(pers.getLayoutX()+pers.getFitWidth()>=backGround.getFitWidth() &&nextScene){
+                sceneChangement ++;
+
+                if(sceneChangement>2){ // j'ai pas encore fait de scene 3
+                    sceneChangement=2;
+                }
+            //    System.out.println("up = "+sceneChangement);
+                nextScene=false;
+                backGroundImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" +"marle"+sceneChangement+".png")));
+               // System.out.println("ta mère");
+                backGround.setImage(backGroundImage);
+
+                HGX.set(0.0d);
+
+            }
+            if(pers.getLayoutX()+pers.getFitWidth()<=30){ // pour éviter de passer en dessous de 0 car il n y a pas de scene -1
+                sceneChangement --;
+
+
+                if(sceneChangement<=0){
+                    sceneChangement=0;
+                }
+              //  System.out.println("down = "+sceneChangement);
+                HGX.set(0.95d);
+
+                backGroundImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" +"marle"+sceneChangement+".png")));
+             //   System.out.println("ta mère");
+                backGround.setImage(backGroundImage);
+
+
+            }
+
+
+
+
+            ////////////////////////////////////gravité:
+            if(!bolObs){
             if(pers.getLayoutY() + pers.getFitHeight() <= backGround.getFitHeight() * 0.8d&&!jumpanimation ){
                 up=false;
                 up1=true;
@@ -280,14 +321,10 @@ public class Game_controleur implements Initializable {
                 }
                 pers.setImage(imagePersonnage);
                 vitesseY += G;
-                System.out.println("gravité vitesse = "+vitesseY);
+              //  System.out.println("gravité vitesse = "+vitesseY);
                 HGY.set(HGY.get()  + vitesseY);
 
-
-
-
             }
-
             if(pers.getLayoutY() + pers.getFitHeight() > backGround.getFitHeight() * 0.8d &&!jumpanimation){
 
                 if (right1) {
@@ -300,6 +337,44 @@ public class Game_controleur implements Initializable {
                 vitesseY = 0;
                 // System.out.println("gravité bon = "+backGround.getFitHeight() * 0.8d);
                 up1=false;
+            }
+            }else{
+                if(pers.getLayoutY() + pers.getFitHeight()  < obstacle.getLayoutY()&&!jumpanimation ){
+                    up=false;
+                    up1=true;
+                    if (right1) {
+                        imagePersonnage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" + personnage.getImageView() + "/" + personnage.getImageView() + "_RightJump.png")));
+                    } else {
+                        imagePersonnage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" + personnage.getImageView() + "/" + personnage.getImageView() + "_LeftJump.png")));
+                    }
+
+                    pers.setImage(imagePersonnage);
+                    vitesseY += G;
+                      System.out.println("gravité vitesse = "+vitesseY);
+                    HGY.set(HGY.get()  + vitesseY);
+
+                    System.out.println("tu rentre ?");
+
+                }
+                if(pers.getLayoutY() + pers.getFitHeight()  >=obstacle.getLayoutY()   &&!jumpanimation){
+
+                    if (right1) {
+                        imagePersonnage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" + personnage.getImageView() + "/" + personnage.getImageView() + "_Right.png")));
+                    } else {
+                        imagePersonnage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" + personnage.getImageView() + "/" + personnage.getImageView() + "_Left.png")));
+                    }
+                    pers.setImage(imagePersonnage);
+
+                    HGY.set((obstacle.getLayoutY()-obstacle.getFitHeight()/2)/backGround.getFitHeight());
+
+                    vitesseY = 0;
+                    // System.out.println("gravité bon = "+backGround.getFitHeight() * 0.8d);
+                    up1=false;
+                }
+
+
+
+
             }
 
             if (left  && !down) {// Permet d'aller à gauche. Évite d'aller à gauche si l'on est accroupi.
@@ -323,7 +398,7 @@ public class Game_controleur implements Initializable {
                     pers.setImage(imagePersonnage);
                 }
                 // Permet de savoir si l'on saute
-                if( jumpanimation ||pers.getLayoutY() + pers.getFitHeight() <= backGround.getFitHeight() * 0.8d){ // si on saute on avance un peut
+                if(up1){ // si on saute on avance un peut
                     HGX.set(HGX.get() - vMarche/2);
 
                 }else{  // Sinon on avance normalement
@@ -363,7 +438,7 @@ public class Game_controleur implements Initializable {
                     pers.setImage(imagePersonnage);
                 }
                 // permet de savoir si l'on saute.
-                if( jumpanimation ||pers.getLayoutY() + pers.getFitHeight() <= backGround.getFitHeight() * 0.8d){ //Si on saute l'on avance un peu.
+                if( up1){ //Si on saute l'on avance un peu.
                     HGX.set(HGX.get() +vMarche/2);
 
                 }else{  // Sinon on avance normalement.
@@ -403,7 +478,7 @@ public class Game_controleur implements Initializable {
                 pers.setImage(imagePersonnage);
 
 
-                System.out.println("avant le saut = "+vitesseY);
+               // System.out.println("avant le saut = "+vitesseY);
                 vitesseY =-0.03d;
 
 
@@ -416,13 +491,13 @@ public class Game_controleur implements Initializable {
                     up=false;// permet de ne plus revenir dans la condition up pour arreter le saut.
                 }else{
                     vitesseY +=0.009d;
-                    System.out.println(vitesseY);
+                  //  System.out.println(vitesseY);
 
                     HGY.set(HGY.get() +  vitesseY);
 
-                    System.out.println(HGY.get());
-                    System.out.println("apres le moin = ");
-                    System.out.println(HGY.get() -  vitesseY);
+                   // System.out.println(HGY.get());
+                //    System.out.println("apres le moin = ");
+                   // System.out.println(HGY.get() -  vitesseY);
                 }
 
 
