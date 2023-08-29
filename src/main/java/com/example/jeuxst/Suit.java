@@ -64,7 +64,7 @@ public class Suit implements Initializable {
 
             Stage stage = (javafx.stage.Stage) ((Node) event.getSource()).getScene().getWindow();
            Scene  scene= new Scene(root);
-            game_controleur.initializeData(scene);
+
             scene.getStylesheets().add(getClass().getResource("Suit.css").toExternalForm());
             stage.setScene(scene);
             stage.show();

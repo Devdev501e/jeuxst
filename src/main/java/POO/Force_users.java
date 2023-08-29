@@ -6,7 +6,7 @@ public  abstract class Force_users extends Personnage{
 
 
     int force;
-    int color;
+
     int damage;
 
 
