@@ -517,7 +517,6 @@ double itemY;
                 HRatio = (double) heightDataObstacle.get(2);
                 hgx=0.4d;
                 hgy=0.66d;
-              //  System.out.println("  obstacle  2 ");
 
             }else{
 
@@ -527,7 +526,6 @@ double itemY;
                 hgx=0.6d;
                 hgy=0.3d;
 
-             //   System.out.println("  obstacle  3 ");
 
 
             }
@@ -547,14 +545,9 @@ double itemY;
             if(  imageViewObstacle.getBoundsInParent().getMaxY()>=pers.getBoundsInParent().getMaxY()&& imageViewObstacle.getBoundsInParent().getMinX()<pers.getBoundsInParent().getCenterX()&&pers.getBoundsInParent().getMaxY()< imageViewObstacle.getBoundsInParent().getMaxY()){
 
                 bolObs=true;
-            //    System.out.println("rentée dans l'obstacle");
-                //System.out.println("ca marche = "+obstacle.getFitHeight());
-                //     System.out.println("getlayoutY = "+obstacle.getLayoutY()+"obstacle.getFitHeight() = "+obstacle.getFitHeight()+"backGround.getFitheight()"+backGround.getFitHeight());
 
             }else{
-              //  System.out.println("ca marche pas");
                 bolObs=false;
-              //  System.out.println("sort de l'obstacle");
             }
 
             if(pers.getBoundsInParent().getMaxX()>imageViewObstacle.getBoundsInParent().getMinX()&&pers.getBoundsInParent().getMinX()<imageViewObstacle.getBoundsInParent().getMaxX()&&pers.getBoundsInParent().getMaxY()>imageViewObstacle.getBoundsInParent().getMinY()&&pers.getBoundsInParent().getMinY()<imageViewObstacle.getBoundsInParent().getMaxY()){
@@ -579,10 +572,6 @@ double itemY;
             }
 
 
-
-
-
-
             ////////////////////////////////////gravité:
 
             if(!bolObs){
@@ -596,7 +585,6 @@ double itemY;
                     }
                     pers.setImage(imagePersonnage);
                     vitesseY += G;
-                    //  System.out.println("gravité vitesse = "+vitesseY);
                     HGY.set(HGY.get()  + vitesseY);
 
                 }
@@ -610,7 +598,6 @@ double itemY;
                     pers.setImage(imagePersonnage);
                     HGY.set((backGround.getFitHeight() * 0.8d - personnage.getFitHeight()) / backGround.getFitHeight()); // il faudra peut etre chnger ca
                     vitesseY = 0;
-                    // System.out.println("gravité bon = "+backGround.getFitHeight() * 0.8d);
                     up1=false;
                 }
             }else{
@@ -625,10 +612,8 @@ double itemY;
 
                     pers.setImage(imagePersonnage);
                     vitesseY += G;
-                   // System.out.println("gravité vitesse = "+vitesseY);
                     HGY.set(HGY.get()  + vitesseY);
 
-                 //   System.out.println("tu rentre ?");
 
                 }
                 if( pers.getBoundsInParent().intersects( imageViewObstacle.getBoundsInParent())     &&!jumpanimation){
@@ -638,12 +623,9 @@ double itemY;
                         imagePersonnage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" + personnage.getImageView() + "/" + personnage.getImageView() + "_Left.png")));
                     }
                     pers.setImage(imagePersonnage);
-                //    System.out.println("true ///////////////////////////////////////////////");
                     HGY.set((imageViewObstacle.getBoundsInParent().getMinY()-pers.getBoundsInParent().getHeight())/backGround.getFitHeight());
-                 //   System.out.println("imageViewObstacle.getBoundsInParent().getCenterY() = "+imageViewObstacle.getBoundsInParent().getCenterY()/backGround.getFitHeight());
 
                     vitesseY = 0;
-                    // System.out.println("gravité bon = "+backGround.getFitHeight() * 0.8d);
                     up1=false;
                 }
 
@@ -653,7 +635,7 @@ double itemY;
             }
 
             if (left  && !down) {// Permet d'aller à gauche. Évite d'aller à gauche si l'on est accroupi.
-                personnage.walkAnimation("Left",leftAnimation,pers,up1);
+                leftAnimation=personnage.walkAnimation("Left",leftAnimation,pers,up1);
                 // Permet de savoir si l'on saute
                 if(up1){ // si on saute on avance un peut
                     HGX.set(HGX.get() - vMarche/2);
@@ -668,7 +650,7 @@ double itemY;
 
             if (right && !down) {// Permet d'aller à droite. Évite d'aller à droite si l'on est accroupi
 
-                personnage.walkAnimation("Right",rightAnimation,pers,up1);
+               rightAnimation= personnage.walkAnimation("Right",rightAnimation,pers,up1);
 
                 nextScene=true;
                 // permet de savoir si l'on saute.
@@ -712,7 +694,6 @@ double itemY;
                 pers.setImage(imagePersonnage);
 
 
-                // System.out.println("avant le saut = "+vitesseY);
                 vitesseY =-0.03d;
 
 
@@ -725,25 +706,14 @@ double itemY;
                     up=false;// permet de ne plus revenir dans la condition up pour arreter le saut.
                 }else{
                     vitesseY +=0.009d;
-                    //  System.out.println(vitesseY);
 
                     HGY.set(HGY.get() +  vitesseY);
 
-                    // System.out.println(HGY.get());
-                    //    System.out.println("apres le moin = ");
-                    // System.out.println(HGY.get() -  vitesseY);
+
                 }
 
 
-                //déplacementY-=5;
 
-
-                // déplacementY-=100;
-                //  pers.setLayoutY(déplacementY);
-                // transition.setFromY(100);
-                //  transition.setToY(0);
-
-                // transition.play();
 
 
 
