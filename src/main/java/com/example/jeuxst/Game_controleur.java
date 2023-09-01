@@ -2,7 +2,6 @@ package com.example.jeuxst;
 
 import POO.Jedi;
 
-import POO.Personnage;
 import POO.Ranged;
 import POO.Saber;
 import javafx.animation.AnimationTimer;
@@ -10,22 +9,19 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
-import java.io.IOException;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import javafx.scene.Scene;
+
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 
-import static java.lang.Math.abs;
+import javafx.scene.layout.AnchorPane;
 
 public class Game_controleur implements Initializable {
 
@@ -54,7 +50,7 @@ public class Game_controleur implements Initializable {
     Jedi personnage;
     Image imagePersonnage;
 
-    Image imageObstacle;
+
 
     Image itemImage;
     Saber saber;
@@ -62,25 +58,25 @@ public class Game_controleur implements Initializable {
 
     double tailleRanged = 8;
 
-          double  tailleSaber =1.5;
+    double  tailleSaber =1.5;
     int numeroColor=1;
 
     boolean bolObs=false;
 
 
 
-    private static SimpleDoubleProperty HGX = new SimpleDoubleProperty();
-    private static SimpleDoubleProperty HGY = new SimpleDoubleProperty();
+    private static final SimpleDoubleProperty HGX = new SimpleDoubleProperty();
+    private static final SimpleDoubleProperty HGY = new SimpleDoubleProperty();
 
-    private static SimpleDoubleProperty HOX = new SimpleDoubleProperty();
-    private static SimpleDoubleProperty HOY = new SimpleDoubleProperty();
+    private static final SimpleDoubleProperty HOX = new SimpleDoubleProperty();
+    private static final SimpleDoubleProperty HOY = new SimpleDoubleProperty();
 
-    public  SimpleDoubleProperty IHGX =new SimpleDoubleProperty();
-    public SimpleDoubleProperty IHGY=new SimpleDoubleProperty();
+    public static final SimpleDoubleProperty IHGX =new SimpleDoubleProperty();
+    public static final SimpleDoubleProperty IHGY=new SimpleDoubleProperty();
 
-    private static double G = 0.003d;
-    private static double vMarche = 0.02d;
-    private static double vitesseY =0.0;
+    private static final double G = 0.003d;
+    private static final double vMarche = 0.018d;
+    private static  double vitesseY =0.0;
 
 double itemX;
 double itemY;
@@ -114,13 +110,13 @@ double itemY;
 
 
     // Pour gérer les obstacles
-    ArrayList imageViewList=new ArrayList<ImageView>();
-    int nombreObstacle=3;   //changer le nombre d'obstacle + un if et ajoutée un affichage
+    ArrayList<ImageView> imageViewList=new ArrayList<>();
+    int nombreObstacle=3;   //changer le nombre d'obstacles + un if et ajoutée un affichage
 
-    ImageView obstacle1 =new ImageView() ;
 
-    ArrayList widthDataObstacle=new ArrayList<Double>();
-    ArrayList heightDataObstacle=new ArrayList<Double>();
+
+    ArrayList<Double> widthDataObstacle=new ArrayList<>();
+    ArrayList<Double> heightDataObstacle=new ArrayList<>();
 
 
     public Game_controleur( ) {
@@ -160,28 +156,21 @@ double itemY;
 
 
          saber =new Saber(2.0, numeroColor,2.0);
-         ranged = new Ranged(2.0,50);
+         ranged = new Ranged(2.0,50,1);
         personnage = new Jedi(20, 2, 10, 14, "mario",saber);
         itemImage =new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" +personnage.getItem().getDossier()+numeroColor+".png")));
           itemImageview.setImage(itemImage);
 
-        itemY=  itemImageview.getImage().getHeight()/backGround.getImage().getHeight();
-        itemX= itemImageview.getImage().getWidth()/backGround.getImage().getWidth();
+        itemY=  itemImageview.getImage().getHeight()/backGround.getImage().getHeight()*tailleSaber;
+        itemX= itemImageview.getImage().getWidth()/backGround.getImage().getWidth()*tailleSaber;
 
-          if(personnage.getItem() instanceof Ranged){
 
-              itemY=itemY/tailleRanged;
-              itemX=itemX/tailleRanged;
-          }else {
-              itemY=itemY*tailleSaber;
-              itemX=itemX*tailleSaber;
-          }
             // itemImageview.setImage(personnage.getItem().getImage());
 
 
+HGX.set(0.1d);
+HGY.set(0.0d);
 
-        HGX.set(0.1d);
-        HGY.set(0.0d);
         // position de l'obstacle :
         HOX.set(0.5d);
         HOY.set(0.7d);
@@ -203,15 +192,7 @@ double itemY;
         mainAnchorPane.getChildren().add(itemImageview);
     }
 
-    public void initializeData(Scene scene) {
 
-
-
-
-
-        // Now you can use these references in your configBackground method
-
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -277,22 +258,19 @@ double itemY;
         animationTimer.start();
     }
 
-    @FXML
-    public void show(KeyEvent event) throws IOException {
 
-
-
-    }
 
     AnimationTimer animationTimer = new AnimationTimer() {
         @Override
         public void handle(long now) {
             Affichage.configBackground(backGround,backGround.getScene(),backGround.getParent());
 
-            Affichage.configurer(pers, 0.046875d, 0.166666d, HGX, HGY, backGround,down);
+            Affichage.configurer(pers, 0.046875d, 0.166666d, HGX,HGY,down);
+            Affichage.configurerN(itemImageview, itemX, itemY, IHGX, IHGY, down);
 
 
             if(b){
+                int number;
                 b=false;
                 if (personnage.getItem() instanceof Saber){
 
@@ -301,9 +279,10 @@ double itemY;
 
                     personnage.changeItem(saber);
                 }
+                number=personnage.getItem().getId();
 
 
-                itemImage =new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" +personnage.getItem().getDossier()+1+".png")));
+                itemImage =new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" +personnage.getItem().getDossier()+ number+".png")));
                 itemImageview.setImage(itemImage);
                 itemY=  itemImageview.getImage().getHeight()/backGround.getImage().getHeight();
                 itemX= itemImageview.getImage().getWidth()/backGround.getImage().getWidth();
@@ -318,10 +297,10 @@ double itemY;
                     itemX=itemX*tailleSaber;
                 }
             }
-            System.out.println(personnage.getItem().getDossier());
+
           if(personnage.getItem() instanceof Ranged){
 
-              IHGY.set(HGY.get() );
+              IHGY.set(HGY.get());
               if (right1) {itemImageview.setScaleX(1);
                   IHGX.set(HGX.get() + 0.04);
                   itemImageview.setRotate(360);
@@ -344,12 +323,17 @@ double itemY;
                   IHGX.set(HGX.get() - 0.06);
               }
           }
+            ImageView particule =new ImageView();
              if(n){
-                 personnage.getItem().Use(itemImageview,right1,HGX,HGY,IHGX,IHGY);
+                 if (personnage.getItem() instanceof Ranged){
+                 n=false;}
+                 particule= personnage.getItem().Use(itemImageview,right1,HGX,HGY,IHGX,IHGY,down);
 
              }
 
-            Affichage.configurer(itemImageview, itemX, itemY, IHGX, IHGY, backGround,down);
+
+
+
 
 
             //Affichage.configurer2(obstacle,LRatio,HRatio,0.1d,0.6d,backGround);
@@ -358,7 +342,7 @@ double itemY;
                 sceneChangement ++;
 
 
-                if(sceneChangement>2){ // j'ai pas encore fait de scene 3
+                if(sceneChangement>2){ // je n'est pas encore fait de scene 3
                     sceneChangement=2;
                 }
                 //    System.out.println("up = "+sceneChangement);
@@ -490,9 +474,9 @@ double itemY;
 
                 } */
 
-            ImageView imageView3 = (ImageView) imageViewList.get(2); //tuyau vert
-            ImageView imageView1 = (ImageView) imageViewList.get(1);
-            ImageView imageView2 = (ImageView) imageViewList.get(0);
+            ImageView imageView3 = imageViewList.get(2); //tuyau vert
+            ImageView imageView1 =  imageViewList.get(1);
+            ImageView imageView2 =  imageViewList.get(0);
 
 
 
@@ -504,25 +488,25 @@ double itemY;
             if ( M.abs(imageView1.getLayoutX()-pers.getLayoutX())< M.abs(imageView3.getLayoutX()-pers.getLayoutX())){
 
                // System.out.println("obstacle 1 ");
-                imageViewObstacle=(ImageView) imageViewList.get(1);
-                LRatio = (double) widthDataObstacle.get(1)/2;
-                HRatio = (double) heightDataObstacle.get(1)/2;
+                imageViewObstacle= imageViewList.get(1);
+                LRatio =  widthDataObstacle.get(1)/2;
+                HRatio =  heightDataObstacle.get(1)/2;
                 hgx=0.1d;
                 hgy=0.6d;
 
 
           }else if( M.abs(imageView3.getLayoutX()-pers.getLayoutX())< M.abs(imageView2.getLayoutX()-pers.getLayoutX()))  {
-                imageViewObstacle=(ImageView) imageViewList.get(2);
-               LRatio = (double) widthDataObstacle.get(2);
-                HRatio = (double) heightDataObstacle.get(2);
+                imageViewObstacle=imageViewList.get(2);
+               LRatio =  widthDataObstacle.get(2);
+                HRatio =  heightDataObstacle.get(2);
                 hgx=0.4d;
                 hgy=0.66d;
 
             }else{
 
-                imageViewObstacle=(ImageView) imageViewList.get(0);
-                LRatio = (double) widthDataObstacle.get(0)/2;
-                HRatio = (double) heightDataObstacle.get(0)/2;
+                imageViewObstacle= imageViewList.get(0);
+                LRatio =  widthDataObstacle.get(0)/2;
+                HRatio =  heightDataObstacle.get(0)/2;
                 hgx=0.6d;
                 hgy=0.3d;
 
@@ -533,16 +517,14 @@ double itemY;
 
             if (sceneChangement==0) {
 
-                Affichage.configurer2(imageViewObstacle, LRatio, HRatio, hgx, hgy, backGround);
-            }else{
-
+                Affichage.configurer2(imageViewObstacle, LRatio, HRatio, hgx, hgy);
             }
 
 
            // pour vérifier si on est au dessu de l'obstacle
 
 
-            if(  imageViewObstacle.getBoundsInParent().getMaxY()>=pers.getBoundsInParent().getMaxY()&& imageViewObstacle.getBoundsInParent().getMinX()<pers.getBoundsInParent().getCenterX()&&pers.getBoundsInParent().getMaxY()< imageViewObstacle.getBoundsInParent().getMaxY()){
+            if( imageViewObstacle.getBoundsInParent().getMaxY()>=pers.getBoundsInParent().getMaxY()&& imageViewObstacle.getBoundsInParent().getMinX()<pers.getBoundsInParent().getCenterX()&&pers.getBoundsInParent().getMaxY()< imageViewObstacle.getBoundsInParent().getMaxY()){
 
                 bolObs=true;
 
@@ -556,7 +538,7 @@ double itemY;
              boolean droite=pers.getBoundsInParent().getMinX()<imageViewObstacle.getBoundsInParent().getMaxX()&&pers.getBoundsInParent().getMinX()>imageViewObstacle.getBoundsInParent().getMaxX()-imageViewObstacle.getBoundsInParent().getMinX()*0.1;
 
                 if(gauche){
-                HGX.set((imageViewObstacle.getBoundsInParent().getMinX()-pers.getBoundsInParent().getWidth())/backGround.getFitWidth());}
+                    HGX.set((imageViewObstacle.getBoundsInParent().getMinX()-pers.getBoundsInParent().getWidth())/backGround.getFitWidth());}
 
                 if(droite) {
                     HGX.set((imageViewObstacle.getBoundsInParent().getMaxX())/backGround.getFitWidth());
@@ -575,8 +557,8 @@ double itemY;
             ////////////////////////////////////gravité:
 
             if(!bolObs){
-                if(pers.getLayoutY() + pers.getFitHeight() <= backGround.getFitHeight() * 0.8d&&!jumpanimation ){
-                    up=false;
+                if(pers.getBoundsInParent().getMinY() + pers.getBoundsInParent().getHeight() <= backGround.getBoundsInParent().getHeight() * 0.8d&&!jumpanimation ){
+                  up=false;
                     up1=true;
                     if (right1) {
                         imagePersonnage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" + personnage.getImageView() + "/" + personnage.getImageView() + "_RightJump.png")));
@@ -585,10 +567,11 @@ double itemY;
                     }
                     pers.setImage(imagePersonnage);
                     vitesseY += G;
+                    System.out.println("tas un problème");
                     HGY.set(HGY.get()  + vitesseY);
 
                 }
-                if(pers.getLayoutY() + pers.getFitHeight() > backGround.getFitHeight() * 0.8d &&!jumpanimation){
+                if(pers.getBoundsInParent().getMinY() + pers.getBoundsInParent().getHeight()  > backGround.getBoundsInParent().getHeight() * 0.8d &&!jumpanimation){
 
                     if (right1) {
                         imagePersonnage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" + personnage.getImageView() + "/" + personnage.getImageView() + "_Right.png")));
@@ -596,7 +579,8 @@ double itemY;
                         imagePersonnage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" + personnage.getImageView() + "/" + personnage.getImageView() + "_Left.png")));
                     }
                     pers.setImage(imagePersonnage);
-                    HGY.set((backGround.getFitHeight() * 0.8d - personnage.getFitHeight()) / backGround.getFitHeight()); // il faudra peut etre chnger ca
+                    HGY.set((backGround.getFitHeight() * 0.8d) / backGround.getFitHeight()); // il faudra peut etre chnger ca
+                    System.out.println("oui");
                     vitesseY = 0;
                     up1=false;
                 }
@@ -683,7 +667,7 @@ double itemY;
 
             }
             if (up ) { // pour sauter
-                up=true; // permet de revenir dans la condition up pour continuer le saut.
+
 
                 jumpanimation=true; // permet de mettre en place le saut. La valeur sera faux quand le saut sera terminée.
                 if (right1) { //pour choisir la bonne orientation de l'image

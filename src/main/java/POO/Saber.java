@@ -1,11 +1,9 @@
 package POO;
 
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Saber extends Weapon{
-    int color;
 
     double endurance;
 
@@ -14,13 +12,13 @@ public class Saber extends Weapon{
 
 
         this.damage=damage;
-        this.color=color;
+        this.id=color;
         this.endurance=endurance;
         this.dossier="Saber/";
     }
 
 @Override
-    public void Use(ImageView imageView, Boolean right1, SimpleDoubleProperty Hgx, SimpleDoubleProperty Hgy, SimpleDoubleProperty IHGX, SimpleDoubleProperty IHGY){
+    public ImageView Use(ImageView imageView, Boolean right1, SimpleDoubleProperty Hgx, SimpleDoubleProperty Hgy, SimpleDoubleProperty IHGX, SimpleDoubleProperty IHGY,boolean down){
         double X=0.08;
         double Y =0.01;
          if(right1) {
@@ -34,6 +32,7 @@ public class Saber extends Weapon{
              imageView.setRotate(-90);
 
          }
+         return imageView;
     }
 
     @Override

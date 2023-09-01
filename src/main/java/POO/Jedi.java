@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class Jedi extends Force_users {
+public class Jedi extends Force_users  {
     int wise;
 
     public Jedi ( int life,int damage,int force,int wise,String image,Item item) {

@@ -18,7 +18,9 @@ import javafx.scene.image.ImageView;
 public class Affichage {
 
     private static double RATIO = 52d/35d;
-    private static ImageView background;
+    public static ImageView background;
+
+    public static double largeurRatio;
 
 
 
@@ -52,8 +54,8 @@ public class Affichage {
         return 2.00;
     }
 
-    public static void configurer(ImageView iV, double LRatio, double HRatio, SimpleDoubleProperty hGX, SimpleDoubleProperty hGY,ImageView background, boolean down) {
-
+    public static void configurer(ImageView iV, double LRatio, double HRatio, SimpleDoubleProperty hGX, SimpleDoubleProperty hGY, boolean down) {
+        largeurRatio=LRatio;
         iV.fitHeightProperty().bind(background.fitHeightProperty().multiply(HRatio));
         iV.fitWidthProperty().bind(background.fitWidthProperty().multiply(LRatio));
         if (down) {
@@ -70,7 +72,25 @@ public class Affichage {
 
         }
     }
-    public static void configurer2(ImageView iV, double LRatio, double HRatio, double hGX, double hGY,ImageView background) {
+    public static void configurerN(ImageView iV, double LRatio, double HRatio, SimpleDoubleProperty hGX, SimpleDoubleProperty hGY, boolean down) {
+
+        iV.fitHeightProperty().bind(background.fitHeightProperty().multiply(HRatio));
+        iV.fitWidthProperty().bind(background.fitWidthProperty().multiply(LRatio));
+        if (down) {
+            SimpleDoubleProperty HGY2 =new SimpleDoubleProperty();
+            HGY2.set(hGY.get()+largeurRatio);
+            iV.layoutXProperty().bind(background.fitWidthProperty().multiply(hGX));
+            iV.layoutYProperty().bind(background.fitHeightProperty().multiply( HGY2));
+
+
+        }else{
+
+            iV.layoutXProperty().bind(background.fitWidthProperty().multiply(hGX));
+            iV.layoutYProperty().bind(background.fitHeightProperty().multiply(hGY));
+
+        }
+    }
+    public static void configurer2(ImageView iV, double LRatio, double HRatio, double hGX, double hGY) {
 
         iV.fitHeightProperty().bind(background.fitHeightProperty().multiply(HRatio));
         iV.fitWidthProperty().bind(background.fitWidthProperty().multiply(LRatio));
@@ -79,6 +99,22 @@ public class Affichage {
             iV.layoutYProperty().bind(background.fitHeightProperty().multiply(hGY));
 
         }
+
+    public static void configurer3(ImageView iV, double LRatio, double HRatio, SimpleDoubleProperty hGX, SimpleDoubleProperty hGY) {
+
+        iV.fitHeightProperty().bind(background.fitHeightProperty().multiply(HRatio));
+        iV.fitWidthProperty().bind(background.fitWidthProperty().multiply(LRatio));
+
+        iV.layoutXProperty().bind(background.fitWidthProperty().multiply(hGX));
+        iV.layoutYProperty().bind(background.fitHeightProperty().multiply(hGY));
+
+    }
+
+
+    public  static  ImageView getBackground(){
+
+        return background;
+    }
     }
 
 

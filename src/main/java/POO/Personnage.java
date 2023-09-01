@@ -3,12 +3,13 @@
 package POO;
 import javafx.application.Application;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.util.Objects;
 
-public abstract class Personnage extends  ImageView {
+public abstract class Personnage {
 
     int life;
     public Item item;
@@ -57,5 +58,6 @@ public abstract class Personnage extends  ImageView {
         }
         return leftAnimation;
     }
+
 
 }
