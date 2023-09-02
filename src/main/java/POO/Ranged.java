@@ -26,7 +26,7 @@ public class Ranged extends Weapon{
     }
 
     @Override
-    public ImageView Use(ImageView imageView, Boolean right1, SimpleDoubleProperty Hgx, SimpleDoubleProperty Hgy, SimpleDoubleProperty IHGX, SimpleDoubleProperty IHGY,boolean down) {
+    public ImageView Use(ImageView imageView, Boolean right1,boolean down) {
 // peut-être quand va remplacer par une arrayliste d'imagview.
 
 
@@ -45,14 +45,14 @@ public class Ranged extends Weapon{
         rootNode.getChildren().add( currentIndex,imageView1);
         TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(0.5), imageView1);
 
-        THGY.set(IHGY.get()+imageView.getBoundsInParent().getHeight()/Affichage.getBackground().getBoundsInParent().getHeight()*0.13);
+        THGY.set(this.getHGY().get()+imageView.getBoundsInParent().getHeight()/Affichage.getBackground().getBoundsInParent().getHeight()*0.13);
         double hRatio= imageView1.getImage().getHeight()/Affichage.getBackground().getImage().getHeight();
         double lRatio= imageView1.getImage().getWidth()/Affichage.getBackground().getImage().getWidth();
         if(right1) {
-            THGX.set(IHGX.get()+0.02);
+            THGX.set(this.HGX.get()+0.02);
             translateTransition.setToX(1000); // Translation horizontale de 200 pixels
         }else{
-            THGX.set(IHGX.get()-0.02);
+            THGX.set(this.HGX.get()-0.02);
             translateTransition.setToX(-1000);
 
         }

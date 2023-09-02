@@ -1,5 +1,6 @@
 package POO;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,12 +16,9 @@ public class Jedi extends Force_users  {
 
         this.wise=wise;
         this.item=item;
+        SimpleDoubleProperty hgy = this.HGY;
 
     }
-
-
-
-
 
 
 

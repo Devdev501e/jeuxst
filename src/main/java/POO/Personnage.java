@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
 
 import java.util.Objects;
 
-public abstract class Personnage {
+public abstract class Personnage extends Coordonnées {
 
     int life;
     public Item item;
@@ -57,6 +57,16 @@ public abstract class Personnage {
             pers.setImage(imagePersonnage);
         }
         return leftAnimation;
+    }
+    @Override
+    public SimpleDoubleProperty getHGY() {
+        return this.HGY;
+    }
+
+    @Override
+    public SimpleDoubleProperty getHGX() {
+        return this.HGX;
+
     }
 
 

@@ -18,17 +18,18 @@ public class Saber extends Weapon{
     }
 
 @Override
-    public ImageView Use(ImageView imageView, Boolean right1, SimpleDoubleProperty Hgx, SimpleDoubleProperty Hgy, SimpleDoubleProperty IHGX, SimpleDoubleProperty IHGY,boolean down){
-        double X=0.08;
-        double Y =0.01;
+    public ImageView Use(ImageView imageView, Boolean right1,boolean down){
+        double X=0.02;
+        double Y =0.06;
+    this.HGY.set(this.HGY.get()+Y);
          if(right1) {
-             IHGY.set(Hgy.get()-Y);
-             IHGX.set(Hgx.get()+X);
+
+             this.HGX.set(this.HGX.get()+X);
              imageView.setRotate(90);
 
          }else{
-              IHGY.set(Hgy.get()-Y);
-             IHGX.set(Hgx.get()-X);
+
+             this.HGX.set(this.HGX.get()-X);
              imageView.setRotate(-90);
 
          }

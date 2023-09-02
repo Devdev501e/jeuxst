@@ -1,5 +1,7 @@
 package POO;
 
+import javafx.beans.property.SimpleDoubleProperty;
+
 public class Sith extends Force_users{
     int electrical;
 
@@ -12,4 +14,6 @@ public class Sith extends Force_users{
 
         this.electrical=electrical;
        }
+
+
 }
