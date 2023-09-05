@@ -5,7 +5,7 @@ import POO.Jedi;
 import POO.Ranged;
 import POO.Saber;
 import javafx.animation.AnimationTimer;
-import javafx.beans.property.SimpleDoubleProperty;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
@@ -40,7 +40,6 @@ public class Game_controleur implements Initializable {
     @FXML
     Button lol;
 
-    ImageView imageViewObstacle ;
 
     ImageView itemImageview=new ImageView();
 
@@ -52,7 +51,9 @@ public class Game_controleur implements Initializable {
     Image itemImage;
     Saber saber;
     Ranged ranged;
+    ImageView particule =new ImageView();
 
+    ArrayList<ImageView> particulListe= new ArrayList();
     double tailleRanged = 8;
 
     double  tailleSaber =1.5;
@@ -63,7 +64,7 @@ public class Game_controleur implements Initializable {
 
     private static final double G = 0.003d;
     private static final double vMarche = 0.018d;
-    private static  double vitesseY =0.0;
+    private static double vitesseY =0.0;
 
     double itemX;
     double itemY;
@@ -85,7 +86,6 @@ public class Game_controleur implements Initializable {
     int jumpIteration = 0;
 
     boolean right1 = false;
-    boolean left1 = false;
 
     boolean nextScene= true;
     int sceneChangement=0;
@@ -138,7 +138,7 @@ public class Game_controleur implements Initializable {
 
 
          saber =new Saber(2.0, numeroColor,2.0);
-         ranged = new Ranged(2.0,50,1);
+         ranged = new Ranged(2.0,100,1);
         personnage = new Jedi(20, 2, 10, 14, "mario",saber);
         itemImage =new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" +personnage.getItem().getDossier()+numeroColor+".png")));
           itemImageview.setImage(itemImage);
@@ -170,6 +170,9 @@ personnage.getHGY().set(0.0d);
         System.out.println( imageViewList);
 
         mainAnchorPane.getChildren().add(itemImageview);
+
+particulListe.add(particule);
+
     }
 
 
@@ -181,17 +184,21 @@ personnage.getHGY().set(0.0d);
         lol.setOnKeyPressed(e -> {
             switch(e.getCode()){
 
+                case Q:
                 case LEFT :
                     left = true;
 
                     break;
+                case D:
                 case RIGHT :
                     right = true;
 
                     break;
+                case S:
                 case DOWN :
                     down = true;
                     break;
+                case Z:
                 case UP :
                     up = true;
                     break;
@@ -210,12 +217,17 @@ personnage.getHGY().set(0.0d);
         lol.setOnKeyReleased(e -> {
             switch(e.getCode()){
 
+                case Q:
                 case LEFT :
                     left = false;
+
                     break;
+                case D:
                 case RIGHT :
                     right = false;
+
                     break;
+                case S:
                 case DOWN :
                     down = false;
                     break;
@@ -247,7 +259,9 @@ personnage.getHGY().set(0.0d);
 
             Affichage.configurer(pers, 0.046875d, 0.166666d, personnage.getHGX(),personnage.getHGY(),down);
             Affichage.configurerN(itemImageview, itemX, itemY, personnage.getItem().getHGX(), personnage.getItem().getHGY(), down);
-            obstacleGravité( imageViewList.get(0) );
+
+
+
 
 
             if(b){
@@ -304,13 +318,40 @@ personnage.getHGY().set(0.0d);
                   personnage.getItem().getHGX().set(personnage.getHGX().get() - 0.06);
               }
           }
-            ImageView particule =new ImageView();
+
              if(n){
                  if (personnage.getItem() instanceof Ranged){
                  n=false;}
                  particule= personnage.getItem().Use(itemImageview,right1,down);
+                 if(particule!=null){
+                     particulListe.add(particule);
+                 }
+
 
              }
+            if(sceneChangement==0){
+
+                bolObs = obstacleGravite(imageViewList.get(0), widthDataObstacle.get(0) / 2, heightDataObstacle.get(0) / 2, 0.7, 0.3) || obstacleGravite(imageViewList.get(2), widthDataObstacle.get(2), heightDataObstacle.get(2), 0.5, 0.66) || obstacleGravite(imageViewList.get(1), widthDataObstacle.get(1) / 2, heightDataObstacle.get(1) / 2, 0.2, 0.6);
+
+            } else if (sceneChangement==1) {
+                bolObs= obstacleGravite( imageViewList.get(1),widthDataObstacle.get(1)/2,heightDataObstacle.get(1)/2,0.15,0.3)||obstacleGravite( imageViewList.get(0),widthDataObstacle.get(0)/2,heightDataObstacle.get(0)/2,0.7,0.6)||            obstacleGravite( imageViewList.get(2),widthDataObstacle.get(2),heightDataObstacle.get(2),0.3,0.66);
+
+            }else if (sceneChangement==2) {
+
+                bolObs= obstacleGravite( imageViewList.get(2),widthDataObstacle.get(2),heightDataObstacle.get(2),0.2,0.66)||obstacleGravite( imageViewList.get(0),widthDataObstacle.get(0)/2,heightDataObstacle.get(0)/2,0.7,0.6)||obstacleGravite( imageViewList.get(1),widthDataObstacle.get(1)/2,heightDataObstacle.get(1)/2,0.3,0.66);
+
+            }
+
+            ImageView imageView2=particulListe.get(particulListe.size()-1);
+
+
+            if(imageView2.getTranslateX()==800||imageView2.getTranslateX()==-800){
+
+                particulListe.remove(particulListe.size()-1);
+            }
+            System.out.println(particulListe.size());
+
+
 
 
 
@@ -335,7 +376,7 @@ personnage.getHGY().set(0.0d);
                 personnage.getHGX().set(0.0d);
                 System.out.println("tu rentre ?");
             }
-            if(pers.getBoundsInParent().getMinX()<backGround.getBoundsInParent().getMinX()){ // pour éviter de passer en dessous de 0 car il n y a pas de scene -1
+            if(pers.getBoundsInParent().getMinX()<backGround.getBoundsInParent().getMinX()){ // pour éviter de passer en dessous de 0, car il n'y a pas de scene -1
                 sceneChangement --;
 
 
@@ -352,120 +393,40 @@ personnage.getHGY().set(0.0d);
 
             }
 
-            ImageView imageView3 = imageViewList.get(2); //tuyau vert
-            ImageView imageView1 =  imageViewList.get(1);
-            ImageView imageView2 =  imageViewList.get(0);
 
-
-
-            double LRatio;
-            double HRatio;
-            double hgx;
-            double hgy;
-
-            if ( M.abs(imageView1.getLayoutX()-pers.getLayoutX())< M.abs(imageView3.getLayoutX()-pers.getLayoutX())){
-
-               // System.out.println("obstacle 1 ");
-                imageViewObstacle= imageViewList.get(1);
-                LRatio =  widthDataObstacle.get(1)/2;
-                HRatio =  heightDataObstacle.get(1)/2;
-                hgx=0.1d;
-                hgy=0.6d;
-
-
-          }else {
-                imageViewObstacle=imageViewList.get(2);
-               LRatio =  widthDataObstacle.get(2);
-                HRatio =  heightDataObstacle.get(2);
-                hgx=0.4d;
-                hgy=0.66d;
-
-            }
-
-
-
-
-            if (sceneChangement==0) {
-
-                Affichage.configurer2(imageViewObstacle, LRatio, HRatio, hgx, hgy);
-            }
-
-
-           // pour vérifier si on est au dessu de l'obstacle
-
-
-            if( imageViewObstacle.getBoundsInParent().getMaxY()>=pers.getBoundsInParent().getMaxY()&& imageViewObstacle.getBoundsInParent().getMinX()<pers.getBoundsInParent().getCenterX()&&pers.getBoundsInParent().getMaxY()< imageViewObstacle.getBoundsInParent().getMaxY()){
-
-                bolObs=true;
-
-            }else{
-                bolObs=false;
-            }
-
-            if(pers.getBoundsInParent().getMaxX()>imageViewObstacle.getBoundsInParent().getMinX()&&pers.getBoundsInParent().getMinX()<imageViewObstacle.getBoundsInParent().getMaxX()&&pers.getBoundsInParent().getMaxY()>imageViewObstacle.getBoundsInParent().getMinY()&&pers.getBoundsInParent().getMinY()<imageViewObstacle.getBoundsInParent().getMaxY()){
-             boolean gauche=pers.getBoundsInParent().getMaxX()>imageViewObstacle.getBoundsInParent().getMinX()&&pers.getBoundsInParent().getMaxX()<imageViewObstacle.getBoundsInParent().getMinX()+imageViewObstacle.getBoundsInParent().getMinX()*0.1;
-
-             boolean droite=pers.getBoundsInParent().getMinX()<imageViewObstacle.getBoundsInParent().getMaxX()&&pers.getBoundsInParent().getMinX()>imageViewObstacle.getBoundsInParent().getMaxX()-imageViewObstacle.getBoundsInParent().getMinX()*0.1;
-
-                if(gauche){
-                    personnage.getHGX().set((imageViewObstacle.getBoundsInParent().getMinX()-pers.getBoundsInParent().getWidth())/backGround.getFitWidth());}
-
-                if(droite) {
-                    personnage.getHGX().set((imageViewObstacle.getBoundsInParent().getMaxX())/backGround.getFitWidth());
-
-            }
-                if(!droite&&!gauche)
-                {
-
-                    personnage.getHGY().set((imageViewObstacle.getBoundsInParent().getMaxY())/backGround.getFitHeight());
-                    jumpanimation = false;
-                }
-
-            }
+        
 
 
             ////////////////////////////////////gravité:
 
+
+            System.out.println(bolObs);
             if(!bolObs){
-                System.out.println("tu rentre pas ici quand meme 1111111111111111111111111111111");
+
                 if(pers.getBoundsInParent().getMinY() + pers.getBoundsInParent().getHeight() <= backGround.getBoundsInParent().getHeight() * 0.8d&&!jumpanimation ){
                     imageJump();
-                    System.out.println("tu rentre111 ?");
+                    System.out.println("ou ici 5464312 ?");
                     personnage.getHGY().set(personnage.getHGY().get()  + vitesseY);
 
                 }
                 if(pers.getBoundsInParent().getMinY() + pers.getBoundsInParent().getHeight()  > backGround.getBoundsInParent().getHeight() * 0.8d &&!jumpanimation){
-                    System.out.println("tu atire111 ?");
+                    System.out.println("brerrrrrrrrr");
                     imageLanding();
                     personnage.getHGY().set((backGround.getFitHeight() * 0.8d) / backGround.getFitHeight()); // il faudra peut etre chnger ca
-                    System.out.println("oui");
-                    vitesseY = 0;
-                    up1=false;
-                }
-            }else{
-                if(!pers.getBoundsInParent().intersects( imageViewObstacle.getBoundsInParent())&&!jumpanimation ){
-                    imageJump();
-                    personnage.getHGY().set(personnage.getHGY().get()  + vitesseY);
-
-
-                }
-                if( pers.getBoundsInParent().intersects( imageViewObstacle.getBoundsInParent())     &&!jumpanimation){
-                    imageLanding();
-                    personnage.getHGY().set((imageViewObstacle.getBoundsInParent().getMinY()-pers.getBoundsInParent().getHeight())/backGround.getFitHeight());
 
                     vitesseY = 0;
                     up1=false;
                 }
-
-
-
-
             }
+
+
+
+
 
             if (left  && !down) {// Permet d'aller à gauche. Évite d'aller à gauche si l'on est accroupi.
                 leftAnimation=personnage.walkAnimation("Left",leftAnimation,pers,up1);
                 // Permet de savoir si l'on saute
-                if(up1){ // si on saute on avance un peut
+                if(up1){ // si on saute, on avance un peu
                     personnage.getHGX().set(personnage.getHGX().get() - vMarche/2);
 
                 }else{  // Sinon on avance normalement
@@ -473,7 +434,7 @@ personnage.getHGY().set(0.0d);
 
 
                 right1 = false;
-                left1 = true;
+
             }
 
             if (right && !down) {// Permet d'aller à droite. Évite d'aller à droite si l'on est accroupi
@@ -489,7 +450,7 @@ personnage.getHGY().set(0.0d);
                     personnage.getHGX().set(personnage.getHGX().get() + vMarche);}
 
                 right1 = true;
-                left1 = false;
+
             }
 
             if (down ) { // pour s'accroupir
@@ -513,7 +474,7 @@ personnage.getHGY().set(0.0d);
             if (up ) { // pour sauter
 
 
-                jumpanimation=true; // permet de mettre en place le saut. La valeur sera faux quand le saut sera terminée.
+                jumpanimation=true; // Permet de mettre en place le saut. La valeur sera faux quand le saut sera terminée.
                 if (right1) { //pour choisir la bonne orientation de l'image
                     imagePersonnage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" + personnage.getImageView() + "/" + personnage.getImageView() + "_RightJump.png")));
                 } else {
@@ -536,23 +497,26 @@ personnage.getHGY().set(0.0d);
                     vitesseY +=0.009d;
 
                     personnage.getHGY().set(personnage.getHGY().get() +  vitesseY);
-
-
                 }
-
-
-
-
-
 
             }
 
+        }
 
 
-
+        private void colision(ImageView obstacle ){
+            for(int i =0 ;i<particulListe.size();i++) {
+                if (particulListe.get(i).getLayoutX() + particulListe.get(i).getTranslateX() < obstacle.getBoundsInParent().getMaxX() && particulListe.get(i).getLayoutX() + particulListe.get(i).getTranslateX() > obstacle.getBoundsInParent().getMinX()) {
+                    if (particulListe.get(i).getLayoutY() > obstacle.getBoundsInParent().getMinY() && particulListe.get(i).getLayoutY() < obstacle.getBoundsInParent().getMaxY()) {
+                        mainAnchorPane.getChildren().remove(particulListe.get(i));
+                        particulListe.remove(i);
+                    }
+                }
+            }
         }
 
         private void imageLanding() {
+
             if (right1) {
                 imagePersonnage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("image/" + personnage.getImageView() + "/" + personnage.getImageView() + "_Right.png")));
             } else {
@@ -573,30 +537,33 @@ personnage.getHGY().set(0.0d);
             vitesseY += G;
         }
 
-        private void obstacleGravité(ImageView imageViewObstacle){
+        public boolean obstacleGravite(ImageView imageViewObstacle,double LRatio,double HRatio,double hgx,double hgy){
+           boolean bolObs1;
 
+            colision(imageViewObstacle);
+            Affichage.configurer2(imageViewObstacle, LRatio, HRatio, hgx, hgy);
+            if(pers.getBoundsInParent().getMinX()<=imageViewObstacle.getBoundsInParent().getMaxX()&&pers.getBoundsInParent().getMaxX()>=imageViewObstacle.getBoundsInParent().getMinX() && pers.getBoundsInParent().getMaxY()<imageViewObstacle.getBoundsInParent().getMaxY() ) {
 
-          double  LRatio1 =  widthDataObstacle.get(0)/2;
-          double  HRatio1 =  heightDataObstacle.get(0)/2;
+                bolObs1=true;
 
+        }else{
 
-            Affichage.configurer2(imageViewObstacle, LRatio1, HRatio1, 0.6d, 0.3d);
-        if( imageViewObstacle.getBoundsInParent().getMaxY()>=pers.getBoundsInParent().getMaxY()&& imageViewObstacle.getBoundsInParent().getMinX()<pers.getBoundsInParent().getCenterX()&&pers.getBoundsInParent().getMaxY()< imageViewObstacle.getBoundsInParent().getMaxY()) {
-            bolObs=true;
+                bolObs1=false;}
+        if( bolObs1) {
             if (!pers.getBoundsInParent().intersects(imageViewObstacle.getBoundsInParent()) && !jumpanimation) {
                 imageJump();
+                System.out.println("ou ici?");
                 personnage.getHGY().set(personnage.getHGY().get() + vitesseY);
 
-                System.out.println("tu rentre ?");
+
             }
             if (pers.getBoundsInParent().intersects(imageViewObstacle.getBoundsInParent()) && !jumpanimation) {
                 imageLanding();
                 personnage.getHGY().set((imageViewObstacle.getBoundsInParent().getMinY() - pers.getBoundsInParent().getHeight()) / backGround.getFitHeight());
-                System.out.println("tes ateri  ?");
+                System.out.println("tu es a l'intérieur ?");
                 vitesseY = 0;
                 up1 = false;
             }
-
         }
             if(pers.getBoundsInParent().getMaxX()>imageViewObstacle.getBoundsInParent().getMinX()&&pers.getBoundsInParent().getMinX()<imageViewObstacle.getBoundsInParent().getMaxX()&&pers.getBoundsInParent().getMaxY()>imageViewObstacle.getBoundsInParent().getMinY()&&pers.getBoundsInParent().getMinY()<imageViewObstacle.getBoundsInParent().getMaxY()){
                 boolean gauche=pers.getBoundsInParent().getMaxX()>imageViewObstacle.getBoundsInParent().getMinX()&&pers.getBoundsInParent().getMaxX()<imageViewObstacle.getBoundsInParent().getMinX()+imageViewObstacle.getBoundsInParent().getMinX()*0.1;
@@ -610,7 +577,7 @@ personnage.getHGY().set(0.0d);
                     personnage.getHGX().set((imageViewObstacle.getBoundsInParent().getMaxX())/backGround.getFitWidth());
 
                 }
-                if(!droite&&!gauche)
+                if(!droite&&!gauche &&pers.getBoundsInParent().getMaxY()>imageViewObstacle.getBoundsInParent().getMinY()+imageViewObstacle.getBoundsInParent().getHeight())
                 {
 
                     personnage.getHGY().set((imageViewObstacle.getBoundsInParent().getMaxY())/backGround.getFitHeight());
@@ -619,8 +586,7 @@ personnage.getHGY().set(0.0d);
 
             }
 
-
-
+return bolObs1;
 
         }
 

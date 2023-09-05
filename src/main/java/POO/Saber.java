@@ -33,7 +33,7 @@ public class Saber extends Weapon{
              imageView.setRotate(-90);
 
          }
-         return imageView;
+         return null;
     }
 
     @Override

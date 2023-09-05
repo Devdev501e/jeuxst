@@ -25,11 +25,9 @@ public class Ranged extends Weapon{
        this.dossier="Ranged/";
     }
 
-    @Override
+   @Override
     public ImageView Use(ImageView imageView, Boolean right1,boolean down) {
 // peut-être quand va remplacer par une arrayliste d'imagview.
-
-
         SimpleDoubleProperty THGY=new SimpleDoubleProperty();
         SimpleDoubleProperty THGX=new SimpleDoubleProperty();
 
@@ -50,10 +48,10 @@ public class Ranged extends Weapon{
         double lRatio= imageView1.getImage().getWidth()/Affichage.getBackground().getImage().getWidth();
         if(right1) {
             THGX.set(this.HGX.get()+0.02);
-            translateTransition.setToX(1000); // Translation horizontale de 200 pixels
+            translateTransition.setToX(800); // Translation horizontale de 200 pixels
         }else{
             THGX.set(this.HGX.get()-0.02);
-            translateTransition.setToX(-1000);
+            translateTransition.setToX(-800);
 
         }
         Affichage.configurerN(imageView1,lRatio/14, hRatio/14, THGX,THGY,down);
@@ -61,7 +59,9 @@ public class Ranged extends Weapon{
 
 
         // Démarre l'animation
-        translateTransition.play();
+
+
+       translateTransition.play();
 
         translateTransition.setOnFinished(event -> {
             rootNode.getChildren().remove(imageView1);
@@ -69,7 +69,8 @@ public class Ranged extends Weapon{
 
         });
 
-   amo--;}
+
+       amo--;}
 
    else{
 
@@ -80,6 +81,9 @@ public class Ranged extends Weapon{
 
 
     }
+
+
+
     @Override
     public String getDossier(){
 

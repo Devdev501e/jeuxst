@@ -58,16 +58,7 @@ public abstract class Personnage extends Coordonnées {
         }
         return leftAnimation;
     }
-    @Override
-    public SimpleDoubleProperty getHGY() {
-        return this.HGY;
-    }
 
-    @Override
-    public SimpleDoubleProperty getHGX() {
-        return this.HGX;
-
-    }
 
 
 }
